@@ -43,7 +43,7 @@ class Digit(Controller):
         else:
             interval = '1'
 
-        input = ('math.floor(time.{} / 10)' if self.index == 0 else 'time.{} % 10').format({'h':'hour', 'm':'min', 's':'sec'}[self.type])
+        input = ('math.floor(time.{} / 10) + 1' if self.index == 0 else 'time.{} % 10 + 1').format({'h':'hour', 'm':'min', 's':'sec'}[self.type])
 
         return super().compile(
             activations=', '.join(['true' if value else 'false' for value in activations]),
