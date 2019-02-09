@@ -29,7 +29,7 @@ class Digit(Controller):
         assert type.lower() in ('h', 'm', 's') and index >= 0
         super().__init__()
 
-        self.pixels = np.load('pixels.npy')
+        self.pixels = np.load('../data/pixels.npy')
         self.type = type.lower()
         self.index = index
 
