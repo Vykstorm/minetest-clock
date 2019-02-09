@@ -81,14 +81,17 @@ class Clock:
     def __init__(self, format):
         self.format = format.lower()
 
-    def compile(self, filename):
+    def compile(self):
         data = {}
         for c in self.format:
             data[c] = Display(c).compile()
+        return data
+
+    def to_json(self, filename):
         with open(filename, 'w') as file:
-            json.dump(data, file)
+            json.dump(self.compile(), file)
 
 if __name__ == '__main__':
-    Clock('HM').compile('../data/clock[hh-mm].json')
-    Clock('MS').compile('../data/clock[mm-ss].json')
-    Clock('HMS').compile('../data/clock[hh-mm-ss].json')
+    Clock('HM').to_json('../data/clock[hh-mm].json')
+    Clock('MS').to_json('../data/clock[mm-ss].json')
+    Clock('HMS').to_json('../data/clock[hh-mm-ss].json')
