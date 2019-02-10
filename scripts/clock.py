@@ -1,97 +1,195 @@
+'''
+The clock is composed by four digits. The first ones indicates the hour and
+the second ones the minutes (on minetest server time)
+
+We will have a total of 4 digits: hh-mm (with indexes from 0 to 3)
+
+Each digit will have a display of size 5x3 pixels (5 rows and 3 columns)
+And each pixel will have an associated lua micro controller (a special
+minetest mesecon component which can be programmed using lua code)
+
+Each lua micro-controller will be responsible to set the current state of
+its associated pixel in the display
+
+The class Clock defined below has a method called get_lua_code that can be
+used to generate the code that must be inserted to a specific micro-controller
+so that the clock is working properly
+
+e.g:
+Clock().get_lua_code(digit_index=1, row=2, col=0) will return the lua
+code for the micro-controller associated to a pixel in the display of the
+2nd clock digit with coordinates (2,0) -> at second row and first column
+
+The next ascii text shows a possible output configuration of the clock's pixels
+'#' means the pixel is activated and '.' for disabled
+
+
+        1st      2nd         3rd      4th     -> th-digit
+     0  1  2   0  1  2     0  1  2   0  1  2  -> col
+0    #  .  .   #  #  #     #  #  #   #  .  #
+1    #  .  .   #  .  #     .  .  #   #  .  #
+2    #  .  .   #  #  #  :  #  #  #   #  #  #
+3    #  .  .   #  .  #     .  .  #   .  .  #
+4    #  .  .   #  #  #     #  #  #   .  .  #
+|
+row
+
+
+
+Depending what direction your clock is facing forward, you must change the
+clock configuration; Three variables named 'output_port' and 'activation_pin',
+'always_active' must be tunned
+
+always_active can be true/false. If set to true, the clock will be always
+enabled and the parameter 'activation_pin' will be ignored
+
+activation_pin can be set to indicate a specific pin on the lua micro-controllers
+to be used to enable/disable the clock
+
+output_port must be set to the port used by micro-controllers to send their
+current pixel states
+
+
+
+The next ascii chars show a lua controller for one pixel of the clock
+The activation signal will come from the A pin and the pixel state is sent
+to the port C
+
+    e/d signal
+        |
+-----------------
+|       A       |
+|  B         C  | -> pixel state
+|       D       |
+-----------------
+
+
+You can execute the next lines of code to configure your clock:
+clock = Clock()
+clock.activation_pin = 'a'
+clock.output_port = 'c'
+clock.always_active = False
+'''
 
 
 
 import numpy as np
 import json
 from itertools import product, count
-
-CONFIG = {
-    'activation_pin' : 'c',
-    'output_port' : 'a'
-}
+from singleton import singleton
+from re import sub
+import re
 
 
-class Controller:
-    def __init__(self):
-        with open('controller-template.lua', 'r') as file:
-            self.template = file.read()
+def render_template(filename, **kwargs):
+    def parse_value(x):
+        if isinstance(x, (list, tuple)):
+            return ', '.join([parse_value(item) for item in x])
 
-    def compile(self, **kwargs):
-        kwargs.update(CONFIG)
-        program = self.template
-        for key, value in kwargs.items():
-            program = program.replace('%{}%'.format(key.replace('_', '-')), value)
-        return program
+        if isinstance(x, bool):
+            return 'true' if x else 'false'
 
+        if not isinstance(x, str):
+            return repr(x)
+        return str(x)
 
-class Digit(Controller):
-    def __init__(self, type, index):
-        assert type.lower() in ('h', 'm', 's') and index >= 0
-        super().__init__()
+    with open(filename, 'r') as file:
+        text = file.read()
 
-        self.pixels = np.load('../data/pixels.npy')
-        self.type = type.lower()
-        self.index = index
+    for key, value in kwargs.items():
+        text = text.replace('%' + key.lower() + '%', parse_value(value))
+        text = text.replace('%' + key.upper() + '%', parse_value(value).upper())
 
-    def compile_pixel(self, row, col):
-        activations = self.pixels[row, col, :].flatten()
+    def block_if_else(match):
+        predicate_var = match.group(1)
+        first_block = match.group(2)
+        second_block = match.group(3)
+        return first_block if kwargs[predicate_var] else second_block
 
-        if self.type == 'm':
-            interval = '60 - time.sec'
-        elif self.type == 'h':
-            interval = '60 * (60 - time.min) + (60 - time.sec)'
-        else:
-            interval = '1'
-
-        input = ('math.floor(time.{} / 10) + 1' if self.index == 0 else 'time.{} % 10 + 1').format({'h':'hour', 'm':'min', 's':'sec'}[self.type])
-
-        return super().compile(
-            activations=', '.join(['true' if value else 'false' for value in activations]),
-            input=input,
-            interval=interval
-        )
-
-    def compile(self):
-        data = []
-        for row, col in product(range(0, 5), range(0, 3)):
-            data.append({
-                'row': row,
-                'col': col,
-                'script':self.compile_pixel(row, col)
-            })
-        return data
+    text = sub("[ \t]*{%[ ]*if ([^%]+) %}[^\n]*\n([^{]+){%[ ]*else[ ]*%}[^\n]*\n([^{]+){%[ ]*end[ ]*%}[ \t]*",
+        block_if_else,
+        text,
+        flags=re.DOTALL)
 
 
+    return text
 
-class Display:
-    def __init__(self, type):
-        self.digits = [Digit(type, 0), Digit(type, 1)]
-
-    def compile(self):
-        data = []
-        for index, digit in zip(count(0), self.digits):
-            data.append({
-                'digit':index,
-                'pixels':digit.compile()
-            })
-        return data
-
-
+@singleton
 class Clock:
-    def __init__(self, format):
-        self.format = format.lower()
+    def __init__(self, **kwargs):
+        self.pixels = np.load('../data/pixels.npy')
+        self._activation_pin = 'a'
+        self._output_port = 'c'
+        self._always_enabled = False
 
-    def compile(self):
-        data = {}
-        for c in self.format:
-            data[c] = Display(c).compile()
-        return data
 
-    def to_json(self, filename):
-        with open(filename, 'w') as file:
-            json.dump(self.compile(), file)
+    # You can configure the clock using the next properties
+    @property
+    def activation_pin(self):
+        return self._activation_pin
+
+    @activation_pin.setter
+    def activation_pin(self, pin):
+        assert pin.lower() in ('a', 'b', 'c', 'd')
+        self._activation_pin = pin.lower()
+
+    @property
+    def output_port(self):
+        return self._output_port
+
+    @output_port.setter
+    def output_port(self, port):
+        assert port.lower() in ('a', 'b', 'c', 'd')
+        self._output_port = port.lower()
+
+    @property
+    def always_enabled(self):
+        return self._always_enabled
+
+    @always_enabled.setter
+    def always_enabled(self, enabled):
+        assert isinstance(enabled, bool)
+        self._always_enabled = enabled
+
+
+    def get_lua_code(self, digit_index, row, col):
+        '''
+        Returns the lua code for a specific micro-controller
+        '''
+
+        # Value of the digit shown on the display
+        value = ('math.floor({} / 10) + 1' if (digit_index % 2) == 0 else '{} % 10 + 1').format(
+            'time.hour' if digit_index < 2 else  'time.min')
+
+        # Amount of secs to elapse before the next pixel update (in server seconds)
+        interval = '60 * (60 - time.min) + (60 - time.sec)' if digit_index < 2 else '60 - time.sec'
+
+        # Each possible pixel state depending on the digit input value
+        states = [bool(state) for state in self.pixels[row, col, :].flatten()]
+
+        # Small header on the lua script to provide additional info
+        cardinals = ['1st', '2nd', '3th', '4th']
+        header = '-- Code for pixel with coordinates ({}, {}) at the {} digit'.format(row, col, cardinals[digit_index])
+
+        # Get the lua code and return it
+        return render_template('controller.lua',
+            input=value,
+            states=states,
+            activation_pin=self.activation_pin,
+            output_port=self.output_port,
+            always_enabled=self.always_enabled,
+            interval=interval,
+            header=header)
+
+    def get_code(self):
+        report = ''
+        for digit_index, row, col in product(range(0, 4), range(0, 5), range(0, 2)):
+            body = self.get_lua_code(digit_index, row, col)
+            report += '~' * 30 + '\n\n' + body + '~' * 30 + '\n\n'
+        return report
 
 if __name__ == '__main__':
-    Clock('HM').to_json('../data/clock[hh-mm].json')
-    Clock('MS').to_json('../data/clock[mm-ss].json')
-    Clock('HMS').to_json('../data/clock[hh-mm-ss].json')
+    clock = Clock()
+    clock.always_enabled = False
+    code = clock.get_code()
+    print(code)
