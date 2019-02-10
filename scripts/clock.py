@@ -152,7 +152,7 @@ class Clock:
         self._always_enabled = enabled
 
 
-    def get_lua_code(self, digit_index, row, col):
+    def get_microcontroller_lua_code(self, digit_index, row, col):
         '''
         Returns the lua code for a specific micro-controller
         '''
@@ -184,9 +184,10 @@ class Clock:
     def get_code(self):
         report = ''
         for digit_index, row, col in product(range(0, 4), range(0, 5), range(0, 2)):
-            body = self.get_lua_code(digit_index, row, col)
+            body = self.get_microcontroller_lua_code(digit_index, row, col)
             report += '~' * 30 + '\n\n' + body + '~' * 30 + '\n\n'
         return report
+
 
 if __name__ == '__main__':
     clock = Clock()
