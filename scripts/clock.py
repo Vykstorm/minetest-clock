@@ -182,11 +182,15 @@ class Clock:
             header=header)
 
     def get_code(self):
-        report = ''
+        code = ''
         for digit_index, row, col in product(range(0, 4), range(0, 5), range(0, 2)):
             body = self.get_microcontroller_lua_code(digit_index, row, col)
-            report += '~' * 30 + '\n\n' + body + '~' * 30 + '\n\n'
-        return report
+            code += '~' * 30 + '\n\n' + body + '~' * 30 + '\n\n'
+        return code
+
+    def save_code(self, filename):
+        with open(filename, 'w') as file:
+            fie.write(get_code())
 
 
 if __name__ == '__main__':
