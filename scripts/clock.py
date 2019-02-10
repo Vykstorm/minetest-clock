@@ -118,8 +118,8 @@ def render_template(filename, **kwargs):
 class Clock:
     def __init__(self, **kwargs):
         self.pixels = np.load('../data/pixels.npy')
-        self._activation_pin = 'a'
-        self._output_port = 'c'
+        self._activation_pin = 'c'
+        self._output_port = 'a'
         self._always_enabled = False
 
 
@@ -190,11 +190,12 @@ class Clock:
 
     def save_code(self, filename):
         with open(filename, 'w') as file:
-            fie.write(get_code())
+            file.write(self.get_code())
 
 
 if __name__ == '__main__':
     clock = Clock()
     clock.always_enabled = False
-    code = clock.get_code()
-    print(code)
+    clock.activation_pin = 'c'
+    clock.output_port = 'a'
+    clock.save_code('../data/microcontrollers-code.txt')
