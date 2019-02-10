@@ -6,8 +6,8 @@ import json
 from itertools import product, count
 
 CONFIG = {
-    'activation_pin' : 'a',
-    'output_port' : 'c'
+    'activation_pin' : 'c',
+    'output_port' : 'a'
 }
 
 
