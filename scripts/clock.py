@@ -183,7 +183,7 @@ class Clock:
 
     def get_code(self):
         code = ''
-        for digit_index, row, col in product(range(0, 4), range(0, 5), range(0, 2)):
+        for digit_index, row, col in product(range(0, 4), range(0, 5), range(0, 3)):
             body = self.get_microcontroller_lua_code(digit_index, row, col)
             code += '~' * 30 + '\n\n' + body + '~' * 30 + '\n\n'
         return code

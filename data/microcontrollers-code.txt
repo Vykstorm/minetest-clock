@@ -38,6 +38,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (0, 2) at the 1st digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.hour / 10) + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (1, 0) at the 1st digit
 
 local time = os.datetable()
@@ -70,6 +89,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {false, false, false, false, false, false, false, false, false, false}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (1, 2) at the 1st digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.hour / 10) + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, false, false, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,6 +152,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (2, 2) at the 1st digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.hour / 10) + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (3, 0) at the 1st digit
 
 local time = os.datetable()
@@ -146,6 +203,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {false, false, false, false, false, false, false, false, false, false}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (3, 2) at the 1st digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.hour / 10) + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, false, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -190,6 +266,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (4, 2) at the 1st digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.hour / 10) + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (0, 0) at the 2nd digit
 
 local time = os.datetable()
@@ -222,6 +317,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {true, false, true, true, false, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (0, 2) at the 2nd digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.hour % 10 + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -266,6 +380,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (1, 2) at the 2nd digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.hour % 10 + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, false, false, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (2, 0) at the 2nd digit
 
 local time = os.datetable()
@@ -298,6 +431,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {false, false, true, true, true, true, true, false, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (2, 2) at the 2nd digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.hour % 10 + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -342,6 +494,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (3, 2) at the 2nd digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.hour % 10 + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, false, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (4, 0) at the 2nd digit
 
 local time = os.datetable()
@@ -374,6 +545,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {true, false, true, true, false, true, true, false, true, false}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (4, 2) at the 2nd digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.hour % 10 + 1]
+   
+   interrupt(60 * (60 - time.min) + (60 - time.sec), 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -418,6 +608,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (0, 2) at the 3th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.min / 10) + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (1, 0) at the 3th digit
 
 local time = os.datetable()
@@ -450,6 +659,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {false, false, false, false, false, false, false, false, false, false}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (1, 2) at the 3th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.min / 10) + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, false, false, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -494,6 +722,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (2, 2) at the 3th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.min / 10) + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (3, 0) at the 3th digit
 
 local time = os.datetable()
@@ -526,6 +773,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {false, false, false, false, false, false, false, false, false, false}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (3, 2) at the 3th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.min / 10) + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, false, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -570,6 +836,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (4, 2) at the 3th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[math.floor(time.min / 10) + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (0, 0) at the 4th digit
 
 local time = os.datetable()
@@ -602,6 +887,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {true, false, true, true, false, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (0, 2) at the 4th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.min % 10 + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -646,6 +950,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (1, 2) at the 4th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.min % 10 + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, false, false, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (2, 0) at the 4th digit
 
 local time = os.datetable()
@@ -678,6 +1001,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {false, false, true, true, true, true, true, false, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (2, 2) at the 4th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.min % 10 + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -722,6 +1064,25 @@ end
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+-- Code for pixel with coordinates (3, 2) at the 4th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.min % 10 + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, false, true, true, true, true, true, true, true}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 -- Code for pixel with coordinates (4, 0) at the 4th digit
 
 local time = os.datetable()
@@ -754,6 +1115,25 @@ if (event.type == 'interrupt' and event.iid == 'update') or
 
 elseif event.type == 'program' then
     mem.states = {true, false, true, true, false, true, true, false, true, false}
+    interrupt(1, 'update')
+end
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-- Code for pixel with coordinates (4, 2) at the 4th digit
+
+local time = os.datetable()
+
+if (event.type == 'interrupt' and event.iid == 'update') or
+   ((event.type == 'on' or event.type == 'off') and event.pin.name == 'C') then
+
+   port.a = pin.c and mem.states[time.min % 10 + 1]
+   
+   interrupt(60 - time.sec, 'update')
+
+elseif event.type == 'program' then
+    mem.states = {true, true, true, true, true, true, true, true, true, true}
     interrupt(1, 'update')
 end
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
